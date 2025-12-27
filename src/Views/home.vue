@@ -57,10 +57,6 @@
   
       </section>
   
-  
-  
-  
-  
       <select id="select" v-model="selectValue"> 
           <option v-for ="(vote, i) in votes" :value ="vote">
               {{ vote.note_technique }}
