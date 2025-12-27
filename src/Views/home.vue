@@ -2,17 +2,10 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-const votes = ref([]);
 const pictureInfos = ref([]);
 const router = useRouter()
 const route = useRoute()
 
-async function init() {
-    const resp = await fetch("http://localhost:3000/api/votes/2")
-    const data = await resp.json();
-    votes.value = data;
-    console.log(votes);
-}
 
 async function getPicture() {
     const resp = await fetch("http://localhost:3000/api/challenges/current")
@@ -25,7 +18,7 @@ async function getPicture() {
         router.push('/currentChallenge');
     }
 
-init();
+
 getPicture();
 
 </script>
