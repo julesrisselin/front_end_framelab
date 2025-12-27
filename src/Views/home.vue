@@ -33,7 +33,7 @@
           <nav>
               <ul>
               <li><RouterLink to="/"> Accueil </RouterLink></li>
-              <li><RouterLink to="/test"> Challenge </RouterLink></li>
+              <li><RouterLink to="/participation"> Challenge </RouterLink></li>
               <li> <RouterLink to="/participations"> Participations </RouterLink></li>
               <li> <RouterLink to="/login"> Connexion </RouterLink></li>
               </ul>

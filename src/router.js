@@ -10,6 +10,8 @@ import CurrentParticipations from './Views/currentParticipations.vue'
 import account from './Views/account.vue'
 import history from './Views/history.vue'
 import moderator from './Views/moderator.vue'
+import addChallenge from './Views/addChallenge.vue'
+
 
 const routes = [
     { path: '/', component: home },
@@ -21,7 +23,8 @@ const routes = [
     {path: '/currentParticpations', component: CurrentParticipations},
     {path: '/account', component: account},
     {path: '/history', component: history},
-    {path: '/moderator', component: moderator}
+    {path: '/moderator/comments', component: moderator},
+    {path: '/moderator', component: addChallenge}
 ]
 
 
