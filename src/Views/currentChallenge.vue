@@ -14,9 +14,25 @@
         console.log(pictureInfos);
     }
     
-        async function goToCurrentParticipations(){
-            router.push('/currentParticipations');
-        }
+    async function goToCurrentChallenge(){
+        router.push('/currentChallenge');
+    }
+
+    async function goToAccueil(){
+        router.push('/');
+    }
+
+    async function goToCurrentParticipations(){
+        router.push('/currentParticipations');
+    }
+
+    async function goToParticipations(){
+        router.push('/participations');
+    }
+
+    async function goToLogin(){
+        router.push('/login');
+    }
     
     getPicture();
     
@@ -25,24 +41,24 @@
     <template>
         <header>
             <nav>
-                <ul>
-                    <li>
-                        <RouterLink to="/"> Accueil </RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/currentChallenge"> Challenge </RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/currentParticipations"> Participations de la semaine </RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/participations"> Toutes les participations </RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/login"> Connexion </RouterLink>
-                    </li>
-                </ul>
-            </nav>
+            <ul>
+                <li>
+                    <button @click= goToAccueil()> Accueil </button>
+                </li>
+                <li>
+                    <button @click= goToCurrentChallenge()> Challenge </button>
+                </li>
+                <li>
+                    <button @click= goToCurrentParticipations()> Participations de la semaine </button>
+                </li>
+                <li>
+                    <button @click= goToParticipations()> Toutes les participations </button>
+                </li>
+                <li>
+                    <button @click= goToLogin()> Connexion > </button>
+                </li>
+            </ul>
+        </nav>
         </header id="accueil">
     
         <div id="picture">

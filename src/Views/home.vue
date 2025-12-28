@@ -18,6 +18,22 @@ async function getPicture() {
         router.push('/currentChallenge');
     }
 
+    async function goToAccueil(){
+        router.push('/');
+    }
+
+    async function goToCurrentParticipations(){
+        router.push('/currentParticipations');
+    }
+
+    async function goToParticipations(){
+        router.push('/participations');
+    }
+
+    async function goToLogin(){
+        router.push('/login');
+    }
+
 
 getPicture();
 
@@ -28,19 +44,19 @@ getPicture();
         <nav>
             <ul>
                 <li>
-                    <RouterLink to="/"> Accueil </RouterLink>
+                    <button @click= goToAccueil()> Accueil </button>
                 </li>
                 <li>
-                    <RouterLink to="/currentChallenge"> Challenge </RouterLink>
+                    <button @click= goToCurrentChallenge()> Challenge </button>
                 </li>
                 <li>
-                    <RouterLink to="/currentParticipations"> Participations de la semaine </RouterLink>
+                    <button @click= goToCurrentParticipations()> Participations de la semaine </button>
                 </li>
                 <li>
-                    <RouterLink to="/participations"> Toutes les participations </RouterLink>
+                    <button @click= goToParticipations()> Toutes les participations </button>
                 </li>
                 <li>
-                    <RouterLink to="/login"> Connexion </RouterLink>
+                    <button @click= goToLogin()> Connexion > </button>
                 </li>
             </ul>
         </nav>
