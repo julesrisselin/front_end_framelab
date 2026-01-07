@@ -62,23 +62,23 @@
         </header id="accueil">
     
         <div id="picture">
-            {{ pictureInfos.data.data.picture }}
+            {{ pictureInfos.data.picture }}
         </div>
 
         <div> <h1> Challenge de la Semaine ! </h1></div>
 
-        <div> <h3> {{ pictureInfos.data.data.title_theme }} </h3></div>
+        <div> <h3> {{ pictureInfos.data.title_theme }} </h3></div>
     
         <div id="scare">
             
             <h4> Thème </h4>
-            <p>  {{ pictureInfos.data.data.title_theme }} </p>
+            <p>  {{ pictureInfos.data.title_theme }} </p>
             <h4> Description </h4>
-            <p> {{ pictureInfos.data.data.description_theme }} </p>
+            <p> {{ pictureInfos.data.description_theme }} </p>
             <h4> Date de début </h4>
-            <p> {{ pictureInfos.data.data.date_start}} </p>
+            <p> {{ pictureInfos.data.date_start}} </p>
             <h4> Date de fin </h4>
-            <p> {{ pictureInfos.data.data.date_end}} </p>
+            <p> {{ pictureInfos.data.date_end}} </p>
 
         </div>
 
