@@ -11,7 +11,6 @@ async function getPicture() {
     const resp = await fetch("http://localhost:3000/api/challenges/current")
     const data = await resp.json();
     pictureInfos.value = data;
-    console.log(pictureInfos);
 }
 
     async function goToCurrentChallenge(){
@@ -68,7 +67,7 @@ getPicture();
 
     <div id="first_scare">
         <div id="second_scare">
-            {{ pictureInfos.data.picture }}
+            <img :src= "'http://localhost:3000/' +  pictureInfos.data.picture" ></img>
         </div>
         <h2> {{ pictureInfos.data.title_theme }} </h2>
         <h4> {{ pictureInfos.data.description_theme }} </h4>
