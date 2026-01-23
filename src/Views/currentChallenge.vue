@@ -62,7 +62,7 @@
         </header id="accueil">
     
         <div id="picture">
-            {{ pictureInfos.data.picture }}
+            <img :src= "'http://localhost:3000/' +  pictureInfos.data.picture" ></img>
         </div>
 
         <div> <h1> Challenge de la Semaine ! </h1></div>
