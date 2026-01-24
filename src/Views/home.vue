@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router'
 
 const pictureInfos = ref([]);
 const router = useRouter()
-const route = useRoute()
 
 
 async function getPicture() {
@@ -40,7 +39,7 @@ getPicture();
 
 <template>
     <header>
-        <nav>
+        <nav id="navbar">
             <ul>
                 <li>
                     <button @click= goToAccueil()> Accueil </button>
@@ -59,7 +58,7 @@ getPicture();
                 </li>
             </ul>
         </nav>
-    </header id="accueil">
+    </header>
 
     <div id="img_accueil">
         <img src="@/assets/images/accueil/accueil.jpg"> </img>
@@ -75,4 +74,29 @@ getPicture();
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+#navbar{
+    background-color: #6B9080;
+    border-radius: 45px;
+    max-width: 100%;
+    min-width: 100%;
+    max-height: 120px;
+    min-height: 10px;
+
+    
+    
+}
+
+ul {
+  align-items: center;
+  display: flex;
+  list-style: none;
+  padding: 40px;
+  margin: 40px;
+  justify-content: space-between;
+}
+
+
+
+</style>
