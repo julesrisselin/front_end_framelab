@@ -6,15 +6,15 @@ const challengeInfos = ref([]);
 const partInfos = ref([]);
 const router = useRouter();
 
-async function getData(){
+async function getData() {
     const respChallenge = await fetch("http://localhost:3000/api/challenges/current");
     const dataChallenge = await respChallenge.json();
     challengeInfos.value = dataChallenge;
-    
+
     const id_challenge = challengeInfos.value.data.id;
 
     const params = new URLSearchParams();
-    params.append("id_challenge" , id_challenge);
+    params.append("id_challenge", id_challenge);
 
     const respPart = await fetch(`http://localhost:3000/api/participations?id_challenge=${params}`);
     const dataPart = await respPart.json();
@@ -33,8 +33,12 @@ async function goToCurrentParticipations() {
     router.push('/currentParticipations');
 }
 
-async function goToParticipations() {
+async function goToAllParticipations() {
     router.push('/participations');
+}
+
+async function goToParticipation() {
+    router.push('/participation');
 }
 
 async function goToLogin() {
@@ -59,7 +63,7 @@ getData();
                     <button @click=goToCurrentParticipations()> Participations de la semaine </button>
                 </li>
                 <li>
-                    <button @click=goToParticipations()> Toutes les participations </button>
+                    <button @click=goToAllParticipations()> Toutes les participations </button>
                 </li>
                 <li>
                     <button @click=goToLogin()> Connexion > </button>
@@ -68,8 +72,8 @@ getData();
         </nav>
     </header id="accueil">
 
-    <div id="picture">
-        <img :src="'http://localhost:3000/' + challengeInfos.data.picture"></img>
+    <div>
+        <img :src="'http://localhost:3000/' + challengeInfos.data.picture" id="picture"></img>
     </div>
 
     <div>
@@ -93,14 +97,19 @@ getData();
 
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <td> {{ partInfos }} </td>
-            </tr>
-        </thead>
-    </table>
+    <h3> Participations ! </h3>
+
+    <li v-for="(picture) in partInfos.data">
+        <img :src="'http://localhost:3000/' + picture.picture_updated_url"></img>
+        {{ picture.date_submission }}
+        <button @click=goToParticipation()> Voter </button>
+    </li>
 
 </template>
 
-<style scoped></style>
+<style scoped>
+#picture {
+    max-height: 50px;
+    max-width: 50px;
+}
+</style>

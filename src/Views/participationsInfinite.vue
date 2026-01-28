@@ -83,7 +83,10 @@ import { ref } from 'vue'
 
         <div> <h2> Toutes les Participations ! </h2></div>
 
-        <p>{{ participationsInfos.data }}</p>
+        <li v-for = "(picture) in participationsInfos.data">
+        <img :src= "'http://localhost:3000/' + picture.picture_updated_url " ></img>
+        {{ picture.date_submission }}
+    </li>
 
 </template>
 
