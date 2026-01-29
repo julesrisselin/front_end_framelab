@@ -19,15 +19,14 @@ async function goToParticipations() {
     router.push('/participations');
 }
 
-async function goToSignIn() {
-    router.push('/signin');
+async function goToAccount() {
+    router.push('/account');
 }
-
 </script>
 
 <template>
     <header>
-        <nav id="navbar">
+        <nav>
             <ul>
                 <li>
                     <button @click=goToAccueil()> Accueil </button>
@@ -42,21 +41,24 @@ async function goToSignIn() {
                     <button @click=goToParticipations()> Toutes les participations </button>
                 </li>
                 <li>
-                    <button @click=goToLogin()> Connexion > </button>
+                    <button @click=goToAccount()> Mon compte </button>
                 </li>
             </ul>
         </nav>
-    </header>
-    <form action="http://localhost:3000/api/auth/login" method="post">
+    </header id="accueil">
+
+    <h1> Ajouter une Participations ! </h1>
+    <div>
+        <br>
+        <form action="http://localhost:3000/api/participations" enctype="multipart/form-data" method="post">
         <div class="form-group">
-            <input type="text" class="email" placeholder="email" name="email">
-            <input type="text" class="password" placeholder="password" name="password">
-            <input type="submit" value="Envoyer" class="btn btn-default"></input>
+            <input type="file" class="form-control-file" name="uploaded_file_participations">
+            <input type="text" class="id_participations" placeholder="id challenge" name="id_challenge">
+            <input type="submit" value="Envoyer" class="btn btn-default">
         </div>
     </form>
-    <br>
+    </div>
 
-    <button @click=goToSignIn()> Ici pour créer un compte </button>
 </template>
 
 <style scoped></style>

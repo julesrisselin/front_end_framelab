@@ -96,7 +96,7 @@ getData();
     <h3> Participations ! </h3>
 
     <li v-for="(picture) in partInfos.data">
-        <img :src="'http://localhost:3000/' + picture.picture_updated_url"></img>
+        <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
         <button @click="$router.push('/participation/'+ picture.id)"> Voir les détails </button>
     </li>
@@ -105,7 +105,7 @@ getData();
 
 <style scoped>
 #picture {
-    max-height: 50px;
-    max-width: 50px;
+    max-height: 150px;
+    max-width: 150px;
 }
 </style>

@@ -11,6 +11,7 @@ import account from './Views/account.vue'
 import history from './Views/history.vue'
 import moderator from './Views/moderator.vue'
 import addChallenge from './Views/addChallenge.vue'
+import Subparticipation from './Views/subparticipation.vue'
 
 
 const routes = [
@@ -18,6 +19,7 @@ const routes = [
     {path: '/currentChallenge', component: currentChallenge},
     {path: '/participations', component: participations_infinite},
     {path: '/participation/:id', component: participation},
+    {path: '/subparticipation', component: Subparticipation},
     {path: '/login', component: login},
     {path: '/signin', component: signIn},
     {path: '/currentParticipations', component: currentParticipations},

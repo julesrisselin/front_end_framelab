@@ -87,10 +87,15 @@ getParticipations();
     </div>
 
     <li v-for="(picture) in participationsInfos.data">
-        <img :src="'http://localhost:3000/' + picture.picture_updated_url"></img>
+        <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
     </li>
 
 </template>
 
-<style scoped></style>
+<style scoped>
+#picture {
+    max-height: 150px;
+    max-width: 150px;
+}
+</style>
