@@ -1,15 +1,22 @@
 <script setup>
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const pictureInfos = ref([]);
 const router = useRouter()
-
+const authentification = ref(false);
 
 async function getPicture() {
     const resp = await fetch("http://localhost:3000/api/challenges/current")
     const data = await resp.json();
     pictureInfos.value = data;
+
+    const respAccount = await fetch("http://localhost:3000/api/users/me",{
+        credentials : "include"
+    })
+    if (respAccount.status === 200){
+        authentification == true;
+    } 
 }
 
     async function goToCurrentChallenge(){
@@ -29,8 +36,10 @@ async function getPicture() {
     }
 
     async function goToLogin(){
-        router.push('/moderator/comments');
+        router.push('/login');
     }
+
+
 
 
 getPicture();
@@ -53,8 +62,11 @@ getPicture();
                 <li>
                     <button @click= goToParticipations()> Toutes les participations </button>
                 </li>
-                <li>
-                    <button @click= goToLogin()> Connexion > </button>
+                <li v-if="authentification = false ">
+                    <button @click= goToLogin() id="Account">  > </button>
+                </li>
+                <li v-else>
+                    <button @click= goToAccount() id="Account"> Mon compte > </button>
                 </li>
             </ul>
         </nav>

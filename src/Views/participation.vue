@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-const route =  useRoute();
+const route = useRoute();
 const router = useRouter();
 const id_participation = route.params.id;
 const participation = ref([]);
 const user = ref([]);
+const comments = ref([]);
+const votes = ref([]);
 
 console.log(route.params.id)
 
@@ -15,18 +17,29 @@ paramsPart.append("id_participation", id_participation);
 
 
 
-async function getParticipations(){
+async function getData() {
     const respPart = await fetch(`http://localhost:3000/api/participations?id_participation=${paramsPart}`)
     const dataPart = await respPart.json();
     participation.value = dataPart;
-    console.log(participation.value.data.user_id)
+
     const paramsUser = new URLSearchParams();
     paramsUser.append("user_id", participation.value.data.user_id);
 
     const respUser = await fetch(`http://localhost:3000/api/users?user_id=${paramsUser}`)
     const dataUser = await respUser.json();
-    console.log(dataUser);
     user.value = dataUser;
+
+    const paramsComVotes = new URLSearchParams();
+    paramsComVotes.append("id", participation.value.data.id);
+
+    const respComments = await fetch(`http://localhost:3000/api/comments/:id${paramsComVotes}`);
+    const dataComments = await respComments.json();
+    comments.value = dataComments;
+
+    const respVotes = await fetch(`http://localhost:3000/api/votes/:id${paramsComVotes}`)
+    const dataVotes = await respVotes.json();
+    //console.log(dataVotes);
+    votes.value = dataVotes;
 }
 
 
@@ -50,7 +63,7 @@ async function goToLogin() {
     router.push('/login');
 }
 
-getParticipations();
+getData();
 </script>
 
 <template>
@@ -77,10 +90,10 @@ getParticipations();
     </header id="accueil">
 
     <div>
-        <img :src= "'http://localhost:3000/' +  participation.data.picture_updated_url" id ="picture"></img>    
+        <img :src="'http://localhost:3000/' + participation.data.picture_updated_url" id="picture"></img>
     </div>
     <div>
-        <h3> Fait par {{  user.data.name }} {{  user.data.firstname }} le {{ participation.data.date_submission }}</h3>
+        <h3> Fait par {{ user.data.name }} {{ user.data.firstname }} le {{ participation.data.date_submission }}</h3>
     </div>
     <div>
         <h3> Pour le challenge N°{{ participation.data.id_challenge }} </h3>
@@ -90,7 +103,7 @@ getParticipations();
         <div class="form-group">
             <input type="number" max="5" class="vote" placeholder="note de créativité" name="note_creativity">
             <input type="number" max="5" class="vote" placeholder="note de technique" name="note_technique">
-            <input type="number"max="5" class="vote" placeholder="note respect du thème" name="note_on_theme">
+            <input type="number" max="5" class="vote" placeholder="note respect du thème" name="note_on_theme">
             <input type="submit" value="Envoyer" class="btn btn-default">
         </div>
     </form>
@@ -101,6 +114,26 @@ getParticipations();
             <input type="submit" value="Envoyer" class="btn btn-default">
         </div>
     </form>
+    <h4> Votes :</h4>
+    <li v-for="(votes) in votes.data">
+        <h5> Compte N° {{ votes.user_id }} </h5>
+    <ul>
+        Note de créativité : {{ votes.note_creativity }}
+    </ul>
+    <ul>
+        Note respect du thème : {{ votes.note_on_theme }}
+    </ul>
+    <ul>
+        Note de technique : {{ votes.note_technique }}
+    </ul>
+    </li>
+
+
+    <h4> Commentaire :</h4>
+    <li v-for="(comments) in comments.data">
+        <h5> Compte N° {{  comments.user_id }} </h5>
+        {{ comments.content }}
+    </li>
 
 
 </template>
