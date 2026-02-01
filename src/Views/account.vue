@@ -45,6 +45,10 @@ async function Account() {
         router.push('/account');
     }
 
+    async function goToHistory(){
+        router.push('/history');
+    }
+
 
 
 
@@ -93,6 +97,8 @@ Account();
         </ul>
         
     </li>
+
+    <button @click= goToHistory()> Voir mes Participations </button>
 
 </template>
 
