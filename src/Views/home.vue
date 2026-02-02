@@ -5,11 +5,20 @@ import { useRouter } from 'vue-router'
 const pictureInfos = ref([]);
 const router = useRouter()
 const authentification = ref(false);
+const check_image_accueil = ref(false);
 
 async function getPicture() {
     const resp = await fetch("http://localhost:3000/api/challenges/current")
     const data = await resp.json();
     pictureInfos.value = data;
+
+
+    if (pictureInfos.value.success == false) {
+        check_image_accueil.value = false;
+    } else {
+        check_image_accueil.value = true;
+    }
+
 
     const respAccount = await fetch("http://localhost:3000/api/users/me", {
         credentials: "include"
@@ -20,6 +29,16 @@ async function getPicture() {
     } else {
         authentification.value = false;
     }
+}
+
+async function LogOut() {
+    const resp = await fetch("http://localhost:3000/api/auth/logout", {
+        credentials: "include"
+    })
+    const data = await resp.json();
+    console.log(data);
+
+
 }
 
 async function goToCurrentChallenge() {
@@ -79,6 +98,7 @@ getPicture();
                 </li>
                 <li v-else id="account">
                     <button @click=goToAccount()> Mon compte </button>
+                    <button @click=LogOut()> Déconnexion </button>
                 </li>
             </ul>
         </nav>
@@ -89,7 +109,7 @@ getPicture();
     </div>
 
     <div id="first_scare">
-        <div id="second_scare">
+        <div v-if="check_image_accueil" id="second_scare">
             <img :src="'http://localhost:3000/' + pictureInfos.data.picture"></img>
         </div>
         <h2> {{ pictureInfos.data.title_theme }} </h2>
@@ -130,7 +150,7 @@ getPicture();
 }
 
 .dropnav:hover.subnav {
-  display: block;
+    display: block;
 }
 
 ul {
