@@ -108,8 +108,8 @@ getPicture();
         <img src="@/assets/images/accueil/accueil.jpg"> </img>
     </div>
 
-    <div id="first_scare">
-        <div v-if="check_image_accueil" id="second_scare">
+    <div v-if = pictureInfos.data.picture id="first_scare">
+        <div id="second_scare">
             <img :src="'http://localhost:3000/' + pictureInfos.data.picture"></img>
         </div>
         <h2> {{ pictureInfos.data.title_theme }} </h2>
