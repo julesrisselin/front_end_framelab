@@ -5,12 +5,12 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const authentification = ref(false);
 const userInfos = ref([]);
+const verifAdmin = ref(false);
 
 async function Account() {
     const respAccount = await fetch("http://localhost:3000/api/users/me",{
         credentials : "include"
     })
-    
     if (respAccount.status === 200){
         authentification.value = true;
     } else {
@@ -19,6 +19,10 @@ async function Account() {
 
     const dataUser = await respAccount.json();
     userInfos.value = dataUser;
+
+    if(userInfos.value.is_admin == 1){
+        verifAdmin.value = true
+    }
 }
 
     async function goToCurrentChallenge(){
@@ -49,7 +53,9 @@ async function Account() {
         router.push('/history');
     }
 
-
+    async function goToAddChallenge(){
+        router.push('/moderator');
+    }
 
 
 Account();
@@ -73,10 +79,10 @@ Account();
                     <button @click= goToParticipations()> Toutes les participations </button>
                 </li>
                 <li v-if="!authentification">
-                    <button @click= goToLogin() id="Account">  Connexion > </button>
+                    <button @click= goToLogin() id="Account">  Connexion </button>
                 </li>
                 <li v-else>
-                    <button @click= goToAccount() id="Account"> Mon compte > </button>
+                    <button @click= goToAccount() id="Account"> Mon compte </button>
                 </li>
             </ul>
         </nav>
@@ -95,10 +101,11 @@ Account();
         <ul>
             Date d'inscription : {{ userInfos.date_inscription }}
         </ul>
-        
     </li>
 
     <button @click= goToHistory()> Voir mes Participations </button>
+
+    <button v-if = verifAdmin @click=goToAddChallenge()> Administration</button>
 
 </template>
 
