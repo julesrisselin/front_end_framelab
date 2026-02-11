@@ -131,7 +131,7 @@ getParticipations();
     </div>
 
     <div>
-        <h2> Toutes les Participations ! </h2>
+        <h2 class=""> Toutes les Participations ! </h2>
     </div>
 
     <li v-if="checkChallenge" v-for="(picture) in partInfosByChallenge.data">

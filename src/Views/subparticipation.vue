@@ -68,7 +68,7 @@ Account();
                 </li>
             </ul>
         </nav>
-    </header id="accueil">
+    </header>
 
     <h1> Ajouter une Participations ! </h1>
     <div>
