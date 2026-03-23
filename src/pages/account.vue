@@ -25,11 +25,6 @@ async function Account() {
     }
 }
 
-async function goToAddChallenge() {
-    router.push('/addChallenge');
-}
-
-
 Account();
 
 </script>
@@ -55,7 +50,11 @@ Account();
 
 
 
-    <button v-if=verifAdmin @click=goToAddChallenge()> Ajouter un challenge </button>
+    
+
+    <v-btn v-if=verifAdmin to="/addChallenge" id="btn-nav"> Ajouter un Challenge </v-btn>
+    <v-btn to="/historypart" id="btn-nav"> Historique de mes Participations </v-btn>
+    <v-btn to="/historycom" id="btn-nav"> Historique de mes Participations </v-btn>
 
 </template>
 
