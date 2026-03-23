@@ -21,9 +21,6 @@ async function sendPart(){
     const respChall = await fetch("http://localhost:3000/api/challenges/current")
     const dataChall = await respChall.json();
     dataChall.data.id
-
-
-    
 }
 
 sendPart();

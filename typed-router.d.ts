@@ -65,6 +65,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/documentation': RouteRecordInfo<
+      '/documentation',
+      '/documentation',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/history': RouteRecordInfo<
       '/history',
       '/history',
@@ -153,6 +160,12 @@ declare module 'vue-router/auto-routes' {
     'src/pages/currentParticipations.vue': {
       routes:
         | '/currentParticipations'
+      views:
+        | never
+    }
+    'src/pages/documentation.vue': {
+      routes:
+        | '/documentation'
       views:
         | never
     }

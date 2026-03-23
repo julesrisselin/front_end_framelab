@@ -7,8 +7,13 @@
       <v-btn to="/currentChallenge" id="btn-nav">CHALLENGE</v-btn>
       <v-btn to="/currentParticipations" id="btn-nav">PARTICIPATIONS DE LA SEMAINE</v-btn>
       <v-btn to="/participationsInfinite" id="btn-nav">TOUTES LES PARTICIPATIONS</v-btn>
-      <v-btn to="/login" v-if="!authentification" id="btn-nav-connexion"> CONNEXION</v-btn>
-      <v-btn to="/account" v-else id="btn-nav-connexion"> MON COMPTE</v-btn>
+      <v-spacer/>
+      <v-btn to="/login" v-if="!authentification" class="mr-4" id="btn-nav-connexion"> CONNEXION</v-btn>
+      <template v-else>
+        <v-btn to="/account" id="btn-nav-connexion"> MON COMPTE</v-btn>
+        <v-btn to="/documentation" id="btn-nav-connexion"> AIDE </v-btn>
+        <v-btn @click=LogOut() class="mr-3" id="btn-nav-connexion"> DÉCONNEXION </v-btn>
+      </template>
     </v-app-bar>
 
     <v-main>
@@ -19,8 +24,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vuetify/lib/composables/router.mjs';
 
 const authentification = ref(false);
+const router = useRouter()
+
 async function account() {
   const respAccount = await fetch("http://localhost:3000/api/users/me", {
     credentials: "include"
@@ -37,11 +45,13 @@ async function LogOut() {
     credentials: "include"
   })
   const data = await resp.json();
-
-
+  authentification.value = false;
+  router.push('/')
 }
 
-account();
+router.beforeEach(account)
+
+//account();
 </script>
 
 <style scoped>
@@ -64,9 +74,9 @@ account();
 }
 
 #v-app {
-  font-family: 'Comme', serif ;
+  font-family: 'Comme', serif;
   background-color: white;
-  color :#6B9080;
+  color: #6B9080;
   margin-top: 5%;
   margin-left: 2%;
 }
@@ -87,7 +97,8 @@ account();
   color: #6B9080;
   font-weight: 400;
   font-size: small;
-  margin-left: 36%;
-  margin-right: 5px;
+  margin-left: 2%;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
