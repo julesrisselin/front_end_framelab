@@ -3,19 +3,21 @@ import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const route = useRoute();
-const router = useRouter();
+
 const id_participation = route.params.id;
 const participation = ref([]);
 const user = ref([]);
 const comments = ref([]);
 const votes = ref([]);
 const authentification = ref(false);
+const verifAdmin = ref(false);
 const userInfos = ref([]);
 const commentaires = ref("");
 
-const note_creativity = ref(0);
-const note_on_theme = ref(0);
-const note_technique = ref(0);
+const note_creativity = ref("");
+const note_on_theme = ref("");
+const note_technique = ref("");
+
 
 
 const paramsPart = new URLSearchParams();
@@ -58,6 +60,10 @@ async function getData() {
 
     const userData = await respAccount.json();
     userInfos.value = userData;
+
+    if (userInfos.value.is_admin == 1) {
+        verifAdmin.value = true
+    }
 }
 
 async function sendComments() {
@@ -90,61 +96,30 @@ async function sendVotes() {
             note_technique: note_technique.value,
         }),
     });
+
+
 }
 
-
-async function goToCurrentChallenge() {
-    router.push('/currentChallenge');
-}
-
-async function goToAccueil() {
-    router.push('/');
-}
-
-async function goToCurrentParticipations() {
-    router.push('/currentParticipations');
-}
-
-async function goToAllParticipations() {
-    router.push('/participations');
-}
-
-async function goToLogin() {
-    router.push('/login');
-}
-
-async function goToAccount() {
-    router.push('/account');
+async function suppCom(id) {
+    console.log(id);
+    const response = await fetch("http://localhost:3000/api/comments", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: id,
+            is_visible : 0,
+        }),
+    });
+    console.log(response)
 }
 
 getData();
 </script>
 
 <template>
-    <header>
-        <nav>
-            <ul>
-                <li>
-                    <button @click=goToAccueil()> Accueil </button>
-                </li>
-                <li>
-                    <button @click=goToCurrentChallenge()> Challenge </button>
-                </li>
-                <li>
-                    <button @click=goToCurrentParticipations()> Participations de la semaine </button>
-                </li>
-                <li>
-                    <button @click=goToAllParticipations()> Toutes les participations </button>
-                </li>
-                <li v-if="!authentification">
-                    <button @click=goToLogin() id="Account"> Connexion </button>
-                </li>
-                <li v-else>
-                    <button @click=goToAccount() id="Account"> Mon compte </button>
-                </li>
-            </ul>
-        </nav>
-    </header id="accueil">
 
     <div>
         <img :src="'http://localhost:3000/' + participation.data.picture_updated_url" id="picture"></img>
@@ -164,31 +139,42 @@ getData();
         name="note_on_theme">
     <button @click=sendVotes() id=""> Envoyer </button>
 
-
     <br>
 
     <input type="text" v-model=commentaires class="comments" placeholder="Entrez un commentaires" name="comments">
-    <button @click=sendComments() id=""> Envoyer </button>
+    <button @click=sendComments()> Envoyer </button>
 
     <h4> Votes :</h4>
-    <li v-for="(votes) in votes.data">
-        <h5> Compte N° {{ votes.user_id }} </h5>
-        <ul>
-            Note de créativité : {{ votes.note_creativity }}
-        </ul>
-        <ul>
-            Note respect du thème : {{ votes.note_on_theme }}
-        </ul>
-        <ul>
-            Note de technique : {{ votes.note_technique }}
-        </ul>
-    </li>
+    <v-container id="votes">
+        <v-row>
+            <v-col v-for="(votes) in votes.data">
+                <v-sheet>
+                    <v-list>
+                        <h5>
+                            Compte N° {{ votes.user_id }}
+                        </h5>
+                        <ul>
+                            Note de créativité : {{ votes.note_creativity }}
+                        </ul>
+                        <ul>
+                            Note respect du thème : {{ votes.note_on_theme }}
+                        </ul>
+                        <ul>
+                            Note de technique : {{ votes.note_technique }}
+                        </ul>
+                    </v-list>
+                </v-sheet>
+            </v-col>
+        </v-row>
+    </v-container>
 
 
     <h4> Commentaire :</h4>
     <li v-for="(comments) in comments.data">
-        <h5> Compte N° {{ comments.user_id }} </h5>
-        {{ comments.content }}
+        <h5 v-if="comments.is_visible"> Compte N° {{ comments.user_id }} </h5>
+        <p v-if="comments.is_visible">{{ comments.content }}</p>
+        <button v-if="verifAdmin && comments.is_visible" @click=suppCom(comments.id)> Supprimer </button>
+        <h5 v-if="comments.is_visible" id="id_com"> {{ comments.id }} </h5>
     </li>
 
 
@@ -198,5 +184,14 @@ getData();
 #picture {
     max-height: 150px;
     max-width: 150px;
+}
+
+#id_com{
+    visibility: hidden;
+}
+
+#votes {
+    display: flex;
+    justify-content: flex-start;
 }
 </style>

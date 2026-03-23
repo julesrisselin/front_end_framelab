@@ -18,27 +18,7 @@ async function getData() {
     const respPart = await fetch(`http://localhost:3000/api/participations?user_id=${paramsPart}`)
     const dataPart = await respPart.json();
     participation.value = dataPart;
-    
-}
-
-async function goToCurrentChallenge() {
-    router.push('/currentChallenge');
-}
-
-async function goToAccueil() {
-    router.push('/');
-}
-
-async function goToCurrentParticipations() {
-    router.push('/currentParticipations');
-}
-
-async function goToParticipations() {
-    router.push('/participations');
-}
-
-async function goToAccount() {
-    router.push('/account');
+   
 }
 
 
@@ -47,27 +27,6 @@ getData();
 </script>
 
 <template>
-    <header>
-        <nav id="navbar">
-            <ul>
-                <li>
-                    <button @click=goToAccueil()> Accueil </button>
-                </li>
-                <li>
-                    <button @click=goToCurrentChallenge()> Challenge </button>
-                </li>
-                <li>
-                    <button @click=goToCurrentParticipations()> Participations de la semaine </button>
-                </li>
-                <li>
-                    <button @click=goToParticipations()> Toutes les participations </button>
-                </li>
-                <li>
-                    <button @click=goToAccount() id="Account"> Mon compte </button>
-                </li>
-            </ul>
-        </nav>
-    </header>
 
     <h1> Historique de vos participations </h1>
 

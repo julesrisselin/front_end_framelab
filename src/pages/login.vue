@@ -31,22 +31,6 @@ async function checkConnexion() {
 
 }
 
-async function goToCurrentChallenge() {
-    router.push('/currentChallenge');
-}
-
-async function goToAccueil() {
-    router.push('/');
-}
-
-async function goToCurrentParticipations() {
-    router.push('/currentParticipations');
-}
-
-async function goToParticipations() {
-    router.push('/participations');
-}
-
 async function goToSignIn() {
     router.push('/signin');
 }
@@ -54,27 +38,7 @@ async function goToSignIn() {
 </script>
 
 <template>
-    <header>
-        <nav id="navbar">
-            <ul>
-                <li>
-                    <button @click=goToAccueil()> Accueil </button>
-                </li>
-                <li>
-                    <button @click=goToCurrentChallenge()> Challenge </button>
-                </li>
-                <li>
-                    <button @click=goToCurrentParticipations()> Participations de la semaine </button>
-                </li>
-                <li>
-                    <button @click=goToParticipations()> Toutes les participations </button>
-                </li>
-                <li>
-                    <button @click=goToLogin()> Connexion > </button>
-                </li>
-            </ul>
-        </nav>
-    </header>
+   
     <input type="text" v-model="email" class="email" placeholder="email" name="email">
     <input type="text" v-model="password" class="password" placeholder="password" name="password">
     <button @click="checkConnexion()"> Se connecter </button>
