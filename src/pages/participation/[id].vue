@@ -26,7 +26,7 @@ paramsPart.append("id_participation", id_participation);
 
 
 async function getData() {
-    const respPart = await fetch(`http://localhost:3000/api/participations?id_participation=${paramsPart}`)
+    const respPart = await fetch(`http://localhost:3000/api/participations?${paramsPart}`)
     const dataPart = await respPart.json();
     participation.value = dataPart;
 
@@ -38,13 +38,13 @@ async function getData() {
     user.value = dataUser;
 
     const paramsComVotes = new URLSearchParams();
-    paramsComVotes.append("id", participation.value.data.id);
+    paramsComVotes.append("id_participation", participation.value.data.id);
 
-    const respComments = await fetch(`http://localhost:3000/api/comments/:id${paramsComVotes}`);
+    const respComments = await fetch(`http://localhost:3000/api/comments?${paramsComVotes}`);
     const dataComments = await respComments.json();
     comments.value = dataComments;
 
-    const respVotes = await fetch(`http://localhost:3000/api/votes/:id${paramsComVotes}`)
+    const respVotes = await fetch(`http://localhost:3000/api/votes?${paramsComVotes}`)
     const dataVotes = await respVotes.json();
     votes.value = dataVotes;
 

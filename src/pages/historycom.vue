@@ -21,6 +21,22 @@ async function getData() {
    
 }
 
+async function suppCom(id) {
+    console.log(id);
+    const response = await fetch("http://localhost:3000/api/comments", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: id,
+            is_visible : 0,
+        }),
+    });
+    console.log(response)
+}
+
 
 getData();
 
@@ -32,6 +48,7 @@ getData();
 
     <li v-for="(comments) in comments.data">
         {{ comments.content }}
+        <button v-if="comments.is_visible" @click=suppCom(comments.id)> Supprimer </button>
     </li>
 </template>
 

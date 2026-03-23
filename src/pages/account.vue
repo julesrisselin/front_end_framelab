@@ -53,8 +53,10 @@ Account();
     
 
     <v-btn v-if=verifAdmin to="/addChallenge" id="btn-nav"> Ajouter un Challenge </v-btn>
+    <br />
     <v-btn to="/historypart" id="btn-nav"> Historique de mes Participations </v-btn>
-    <v-btn to="/historycom" id="btn-nav"> Historique de mes Participations </v-btn>
+    <br />
+    <v-btn to="/historycom" id="btn-nav"> Historique de mes Commentaires </v-btn>
 
 </template>
 
