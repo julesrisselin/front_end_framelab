@@ -23,10 +23,6 @@ async function getPicture() {
     }
 }
 
-async function goToCurrentParticipations() {
-    router.push('/currentParticipations');
-}
-
 getPicture();
 
 </script>

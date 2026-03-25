@@ -18,6 +18,8 @@ const note_creativity = ref("");
 const note_on_theme = ref("");
 const note_technique = ref("");
 
+const nb_total_com = ref();
+
 
 
 const paramsPart = new URLSearchParams();
@@ -47,6 +49,10 @@ async function getData() {
     const respVotes = await fetch(`http://localhost:3000/api/votes?${paramsComVotes}`)
     const dataVotes = await respVotes.json();
     votes.value = dataVotes;
+
+    const respVotesTotal = await fetch('http://localhost:3000/api/votes')
+    const dataVotesTotal = await respVotesTotal.json();
+    nb_total_com.value = dataVotesTotal.data.length;
 
     const respAccount = await fetch("http://localhost:3000/api/users/me", {
         credentials: "include"
@@ -113,7 +119,6 @@ async function suppCom(id) {
             is_visible : 0,
         }),
     });
-    console.log(response)
 }
 
 getData();
@@ -169,7 +174,8 @@ getData();
     </v-container>
 
 
-    <h4> Commentaire :</h4>
+    <h3> Commentaire :</h3>
+    <h4> Nombre total de commentaires : {{  nb_total_com }}</h4>
     <li v-for="(comments) in comments.data">
         <h5 v-if="comments.is_visible"> Compte N° {{ comments.user_id }} </h5>
         <p v-if="comments.is_visible">{{ comments.content }}</p>
