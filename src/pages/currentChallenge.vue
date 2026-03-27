@@ -8,11 +8,11 @@ const authentification = ref(false);
 
 
 async function getPicture() {
-    const resp = await fetch("http://localhost:3000/api/challenges/current")
+    const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/challenges/current")
     const data = await resp.json();
     pictureInfos.value = data;
 
-    const respAccount = await fetch("http://localhost:3000/api/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
     })
 

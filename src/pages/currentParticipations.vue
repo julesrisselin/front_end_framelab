@@ -8,7 +8,7 @@ const router = useRouter();
 const authentification = ref(false);
 
 async function getData() {
-    const respChallenge = await fetch("http://localhost:3000/api/challenges/current");
+    const respChallenge = await fetch(import.meta.env.VITE_SERVER_URL + "/api/challenges/current");
     const dataChallenge = await respChallenge.json();
     challengeInfos.value = dataChallenge;
 
@@ -21,7 +21,7 @@ async function getData() {
     const dataPart = await respPart.json();
     partInfos.value = dataPart;
 
-    const respAccount = await fetch("http://localhost:3000/api/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
     })
 

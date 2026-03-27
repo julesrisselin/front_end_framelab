@@ -13,13 +13,13 @@ const checkChallenge = ref(false);
 const checkUser = ref(false);
 
 async function getParticipations() {
-    const resp = await fetch("http://localhost:3000/api/participations")
+    const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/participations")
     const data = await resp.json();
     participationsInfos.value = data;
 }
 
 async function account() {
-    const respAccount = await fetch("http://localhost:3000/api/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
     })
     if (respAccount.status === 200) {
@@ -66,7 +66,7 @@ getParticipations();
 
 <template>
 
-    <div id="" filter>
+    <div>
         <h2> Filtres </h2>
         <input type="number" v-model="id_challenge" placeholder="Entrez l'id du challenge" required />
         <button @click=getPartByChallenge() id=""> Afficher </button>

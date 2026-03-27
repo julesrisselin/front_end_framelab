@@ -6,9 +6,10 @@ const pictureInfos = ref([]);
 const router = useRouter()
 const authentification = ref(false);
 const check_image_accueil = ref(false);
+const serverUrl = ref(import.meta.env.VITE_SERVER_URL);
 
 async function getPicture() {
-    const resp = await fetch("http://localhost:3000/api/challenges/current")
+    const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/challenges/current")
     const data = await resp.json();
     pictureInfos.value = data;
 
@@ -20,7 +21,7 @@ async function getPicture() {
     }
 
 
-    const respAccount = await fetch("http://localhost:3000/api/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
     })
 
@@ -32,13 +33,14 @@ async function getPicture() {
 }
 
 async function LogOut() {
-    const resp = await fetch("http://localhost:3000/api/auth/logout", {
+    const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/auth/logout", {
         credentials: "include"
     })
     const data = await resp.json();
 
 
 }
+console.log(import.meta.env.VITE_SERVER_URL);
 
 async function goToCurrentChallenge() {
     router.push('/currentChallenge');
@@ -51,7 +53,7 @@ getPicture();
 <template>
 
     <div id="img_accueil">
-        <img id="img_challenge" :src="'http://localhost:3000/' + pictureInfos.data.picture"></img>
+        <img id="img_challenge" :src="serverUrl + pictureInfos.data.picture"></img>
         <img id="img" src="@/assets/images/accueil/accueil.jpg"> </img>
     </div>
     <div id="infos">

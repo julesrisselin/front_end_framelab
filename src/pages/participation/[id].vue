@@ -35,7 +35,7 @@ async function getData() {
     const paramsUser = new URLSearchParams();
     paramsUser.append("user_id", participation.value.data.user_id);
 
-    const respUser = await fetch(`http://localhost:3000/api/users?user_id=${paramsUser}`)
+    const respUser = await fetch(`http://localhost:3000/api/users?${paramsUser}`)
     const dataUser = await respUser.json();
     user.value = dataUser;
 
@@ -54,7 +54,7 @@ async function getData() {
     const dataVotesTotal = await respVotesTotal.json();
     nb_total_com.value = dataVotesTotal.data.length;
 
-    const respAccount = await fetch("http://localhost:3000/api/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_API + "/users/me", {
         credentials: "include"
     })
 
@@ -73,7 +73,7 @@ async function getData() {
 }
 
 async function sendComments() {
-    const response = await fetch("http://localhost:3000/api/comments", {
+    const response = await fetch(import.meta.env.VITE_API + "/comments", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -88,7 +88,7 @@ async function sendComments() {
 }
 
 async function sendVotes() {
-    const response = await fetch("http://localhost:3000/api/votes", {
+    const response = await fetch(import.meta.env.VITE_API + "/votes", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -108,7 +108,7 @@ async function sendVotes() {
 
 async function suppCom(id) {
     console.log(id);
-    const response = await fetch("http://localhost:3000/api/comments", {
+    const response = await fetch(import.meta.env.VITE_API + "/comments", {
         method: "PUT",
         credentials: "include",
         headers: {

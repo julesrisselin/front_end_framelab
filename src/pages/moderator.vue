@@ -7,7 +7,7 @@ const router = useRouter()
 
 
 async function getComments() {
-    const resp = await fetch("http://localhost:3000/api/comments")
+    const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/comments")
     const data = await resp.json();
     comments.value = data;
 }

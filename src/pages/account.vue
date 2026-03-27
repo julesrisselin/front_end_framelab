@@ -8,7 +8,7 @@ const userInfos = ref([]);
 const verifAdmin = ref(false);
 
 async function Account() {
-    const respAccount = await fetch("http://localhost:3000/api/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
     })
     if (respAccount.status === 200) {

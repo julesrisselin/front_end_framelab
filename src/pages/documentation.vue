@@ -141,9 +141,12 @@
         </v-expansion-panel>
     </v-expansion-panels>
     
-    <button id="btn-api" ><a href="http://localhost:3000/api-docs/"> Documentation Technique </a></button>
+    <button id="btn-api" ><a :href="serverUrl + '/docs/'"> Documentation Technique </a></button>
 </template>
-<script>
+<script setup>
+import { ref } from 'vue';
+
+const serverUrl = ref(import.meta.env.VITE_SERVER_URL)
 
 </script>
 

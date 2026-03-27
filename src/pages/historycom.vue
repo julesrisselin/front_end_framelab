@@ -7,7 +7,7 @@ const userInfos = ref([]);
 const comments = ref([]);
 
 async function getData() {
-    const respAccount = await fetch("http://localhost:3000/api/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
     })
     const dataUser = await respAccount.json();
@@ -22,8 +22,7 @@ async function getData() {
 }
 
 async function suppCom(id) {
-    console.log(id);
-    const response = await fetch("http://localhost:3000/api/comments", {
+    const response = await fetch(import.meta.env.VITE_SERVER_URL + "/api/comments", {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -34,7 +33,6 @@ async function suppCom(id) {
             is_visible : 0,
         }),
     });
-    console.log(response)
 }
 
 

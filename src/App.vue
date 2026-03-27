@@ -30,7 +30,7 @@ const authentification = ref(false);
 const router = useRouter()
 
 async function account() {
-  const respAccount = await fetch("http://localhost:3000/api/users/me", {
+  const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
     credentials: "include"
   })
   if (respAccount.status === 200) {
@@ -41,7 +41,7 @@ async function account() {
 }
 
 async function LogOut() {
-  const resp = await fetch("http://localhost:3000/api/auth/logout", {
+  const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/auth/logout", {
     credentials: "include"
   })
   const data = await resp.json();

@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 
 const router = useRouter()
 const authentification = ref(false);
 
 async function Account() {
-    const respAccount = await fetch("http://localhost:3000/api/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
     })
 
@@ -20,6 +20,8 @@ async function Account() {
 
 Account();
 
+const serverUrl = ref(import.meta.env.VITE_SERVER_URL)
+
 </script>
 
 <template>
@@ -28,7 +30,7 @@ Account();
     <v-btn to="/account"> Mon compte  </v-btn>
     <div>
         <br>
-        <form action="http://localhost:3000/api/challenges" enctype="multipart/form-data" method="post">
+        <form :action="serverUrl + '/api/challenges'" enctype="multipart/form-data" method="post">
             <div class="form-group">
                 <input type="file" class="form-control-file" name="uploaded_file">
                 <input type="text" class="title" placeholder="Title" name="title">

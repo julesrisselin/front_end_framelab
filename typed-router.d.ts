@@ -121,6 +121,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/validation/[token]': RouteRecordInfo<
+      '/validation/[token]',
+      '/validation/:token',
+      { token: ParamValue<true> },
+      { token: ParamValue<false> },
+      | never
+    >,
   }
 
   /**
@@ -215,6 +222,12 @@ declare module 'vue-router/auto-routes' {
     'src/pages/signin.vue': {
       routes:
         | '/signin'
+      views:
+        | never
+    }
+    'src/pages/validation/[token].vue': {
+      routes:
+        | '/validation/[token]'
       views:
         | never
     }
