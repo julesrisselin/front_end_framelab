@@ -11,6 +11,7 @@ const partInfosByUser = ref([]);
 const authentification = ref(false);
 const checkChallenge = ref(false);
 const checkUser = ref(false);
+const emptymess = ref(false);
 
 async function getParticipations() {
     const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/participations")
@@ -33,31 +34,36 @@ async function getPartByChallenge() {
     const params = new URLSearchParams();
     params.append("id_challenge", id_challenge.value);
 
-    const respPart = await fetch(`http://localhost:3000/api/participations?id_challenge=${params}`);
+    const respPart = await fetch(`http://localhost:3000/api/participations?${params}`);
     const dataPart = await respPart.json();
     if (dataPart.data.length > 0) {
         checkChallenge.value = true;
+    } else {
+        emptymess.value = true;
     }
     partInfosByChallenge.value = dataPart;
 }
 
 
 async function getPartByUserID() {
-
     const params = new URLSearchParams();
     params.append("user_id", user_id.value);
 
-    const respUser = await fetch(`http://localhost:3000/api/participations?user_id=${params}`);
+    const respUser = await fetch(`http://localhost:3000/api/participations?${params}`);
     const dataUser = await respUser.json();
     if (dataUser.data.length > 0) {
         checkUser.value = true;
+    } else {
+        emptymess.value = true;
     }
     partInfosByUser.value = dataUser;
+    
 }
 
 async function showAll() {
     checkChallenge.value = false
     checkUser.value = false
+    emptymess.value = false
 }
 
 account();
@@ -65,21 +71,27 @@ getParticipations();
 </script>
 
 <template>
+        <div id="formSignIn">
+            <h2> Filtres </h2>
+            <v-card class="mb-2" maxWidth="400" maxHeight="300">
+                <v-card-text>
+                    <v-text-field v-model="id_challenge" type="number" placeholder="Entrez l'id du challenge" required/>
+                    <v-btn @click=getPartByChallenge()>Afficher</v-btn>
 
-    <div>
-        <h2> Filtres </h2>
-        <input type="number" v-model="id_challenge" placeholder="Entrez l'id du challenge" required />
-        <button @click=getPartByChallenge() id=""> Afficher </button>
+                    <br>
 
-        <br>
+                    <v-text-field v-model="user_id" type="number" placeholder="Entrez l'id du user" required/>
+                    <v-btn @click="getPartByUserID()">Afficher</v-btn>
+                    <br>
+                    <v-btn @click=showAll() class="position-absolute bottom-0 right-0 rounded-lg"> Tout Afficher </v-btn>
+                </v-card-text>
+            
+            </v-card>
+        </div>
 
-        <input type="number" v-model="user_id" placeholder="Entrez l'id du user" required />
-        <button @click=getPartByUserID() id=""> Afficher </button>
-        <button @click=showAll() id=""> Tout Afficher </button>
 
 
 
-    </div>
 
     <div>
         <h2 class=""> Toutes les Participations ! </h2>
@@ -89,15 +101,18 @@ getParticipations();
         <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
     </li>
-    <li v-else-if ="checkUser" v-for="(picture) in partInfosByUser.data">
+    <li v-else-if="checkUser" v-for="(picture) in partInfosByUser.data">
         <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
     </li>
-
+    <li v-else-if="emptymess">
+        <h3> L'id donnée n'a aucune participation associée </h3>
+    </li>
     <li v-else v-for="(picture) in participationsInfos.data">
         <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
     </li>
+
 
 </template>
 

@@ -38,14 +38,22 @@ async function goToSignIn() {
 </script>
 
 <template>
-   
-    <input type="text" v-model="email" class="email" placeholder="email" name="email">
-    <input type="text" v-model="password" class="password" placeholder="password" name="password">
-    <button @click="checkConnexion()"> Se connecter </button>
-    <div v-if= !connexion>
-       <h3> Mot de passe ou email incorrect </h3>
+    <div id="formSignIn">
+        <v-card class="mx-auto" maxWidth="500">
+            <v-card-text>
+                <v-text-field v-model="email" type="text" class="email" placeholder="email" name="email" />
+                <v-text-field v-model="password" type="password" class="password" placeholder="password"
+                    name="password" />
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer />
+                <v-btn @click="checkConnexion()">Se Connecter</v-btn>
+            </v-card-actions>
+        </v-card>
+        <div v-if=!connexion>
+            <h3> Mot de passe ou email incorrect </h3>
+        </div>
     </div>
-    <br>
 
     <button @click=goToSignIn()> Ici pour créer un compte </button>
 </template>

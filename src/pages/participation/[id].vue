@@ -17,10 +17,11 @@ const commentaires = ref("");
 const note_creativity = ref("");
 const note_on_theme = ref("");
 const note_technique = ref("");
-
+const dataUserLog = ref();
 const nb_total_com = ref();
-
-
+const userData = ref("");
+const repSubVotes = ref();
+const URL_SERVEUR = ref(import.meta.env.VITE_SERVER_URL);
 
 const paramsPart = new URLSearchParams();
 paramsPart.append("id_participation", id_participation);
@@ -54,7 +55,7 @@ async function getData() {
     const dataVotesTotal = await respVotesTotal.json();
     nb_total_com.value = dataVotesTotal.data.length;
 
-    const respAccount = await fetch(import.meta.env.VITE_API + "/users/me", {
+    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
     })
 
@@ -64,8 +65,7 @@ async function getData() {
         authentification.value = false;
     }
 
-    const userData = await respAccount.json();
-    userInfos.value = userData;
+    userData.value = await respAccount.json();
 
     if (userInfos.value.is_admin == 1) {
         verifAdmin.value = true
@@ -73,7 +73,7 @@ async function getData() {
 }
 
 async function sendComments() {
-    const response = await fetch(import.meta.env.VITE_API + "/comments", {
+    const response = await fetch(import.meta.env.VITE_SERVER_URL + "/api/comments", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -81,29 +81,35 @@ async function sendComments() {
         },
         body: JSON.stringify({
             id_participations: id_participation,
-            user_id: userInfos.value.id,
+            user_id: userData.value.id,
             content: commentaires.value
         }),
     });
 }
 
 async function sendVotes() {
-    const response = await fetch(import.meta.env.VITE_API + "/votes", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id_participations: id_participation,
-            user_id: userInfos.value.id,
-            note_creativity: note_creativity.value,
-            note_on_theme: note_on_theme.value,
-            note_technique: note_technique.value,
-        }),
-    });
-
-
+    if (userData.value.id == participation.value.data.user_id) {
+        return repSubVotes.value == 0;
+    } else {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + "/api/votes", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id_participations: id_participation,
+                user_id: userData.value.id,
+                note_creativity: note_creativity.value,
+                note_on_theme: note_on_theme.value,
+                note_technique: note_technique.value,
+            }),
+        });
+        const votesData = await response.json();
+        if (votesData.success) {
+            repSubVotes.value == true;
+        }
+    }
 }
 
 async function suppCom(id) {
@@ -116,7 +122,7 @@ async function suppCom(id) {
         },
         body: JSON.stringify({
             id: id,
-            is_visible : 0,
+            is_visible: 0,
         }),
     });
 }
@@ -142,7 +148,9 @@ getData();
         name="note_technique">
     <input type="number" v-model=note_technique max="5" class="vote" placeholder="note respect du thème"
         name="note_on_theme">
-    <button @click=sendVotes() id=""> Envoyer </button>
+    <button @click=sendVotes()> Envoyer </button>
+    <h5 v-if="repSubVotes"> Vos votes ont bien été envoyés </h5>
+    <h5 v-if="repSubVotes == 0"> Vous ne pouvez pas voter pour votre propre participation </h5>
 
     <br>
 
@@ -175,7 +183,7 @@ getData();
 
 
     <h3> Commentaire :</h3>
-    <h4> Nombre total de commentaires : {{  nb_total_com }}</h4>
+    <h4> Nombre total de commentaires : {{ nb_total_com }}</h4>
     <li v-for="(comments) in comments.data">
         <h5 v-if="comments.is_visible"> Compte N° {{ comments.user_id }} </h5>
         <p v-if="comments.is_visible">{{ comments.content }}</p>
@@ -192,7 +200,7 @@ getData();
     max-width: 150px;
 }
 
-#id_com{
+#id_com {
     visibility: hidden;
 }
 

@@ -17,7 +17,7 @@ async function getData() {
     const params = new URLSearchParams();
     params.append("id_challenge", id_challenge);
 
-    const respPart = await fetch(`http://localhost:3000/api/participations?id_challenge=${params}`);
+    const respPart = await fetch(`http://localhost:3000/api/participations?${params}`);
     const dataPart = await respPart.json();
     partInfos.value = dataPart;
 
