@@ -9,7 +9,7 @@ const router = useRouter()
 async function getComments() {
     const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/comments")
     const data = await resp.json();
-    comments.value = data;
+    comments.value = data.data;
 }
 
 async function goToAddChallenge() {
@@ -25,7 +25,7 @@ getComments();
     <button @click=goToAddChallenge()> Ajouter un challenge ! </button>
     <div>
         <br>
-        <li v-for="(comments) in comments.data">
+        <li v-for="(comments) in comments">
             <div v-if="comments.is_visible === 1">
                 <li>
                     {{ comments.content }}

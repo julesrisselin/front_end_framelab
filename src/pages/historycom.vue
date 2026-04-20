@@ -11,13 +11,13 @@ async function getData() {
         credentials: "include"
     })
     const dataUser = await respAccount.json();
-    userInfos.value = dataUser;
+    userInfos.value = dataUser.data;
     const paramsPart = new URLSearchParams();
     paramsPart.append("user_id", userInfos.value.id);
 
     const respPart = await fetch(`http://localhost:3000/api/comments?${paramsPart}`)
     const dataPart = await respPart.json();
-    comments.value = dataPart;
+    comments.value = dataPart.data;
    
 }
 
@@ -44,7 +44,7 @@ getData();
 
     <h1> Historique de vos commentaires </h1>
 
-    <li v-for="(comments) in comments.data">
+    <li v-for="(comments) in comments">
         {{ comments.content }}
         <button v-if="comments.is_visible" @click=suppCom(comments.id)> Supprimer </button>
     </li>

@@ -11,8 +11,8 @@ const serverUrl = ref(import.meta.env.VITE_SERVER_URL);
 async function getPicture() {
     const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/challenges/current")
     const data = await resp.json();
-    pictureInfos.value = data;
-
+    
+    pictureInfos.value = data.data;
 
     if (pictureInfos.value.success == false) {
         check_image_accueil.value = false;
@@ -37,10 +37,8 @@ async function LogOut() {
         credentials: "include"
     })
     const data = await resp.json();
-
-
 }
-console.log(import.meta.env.VITE_SERVER_URL);
+
 
 async function goToCurrentChallenge() {
     router.push('/currentChallenge');
@@ -53,14 +51,14 @@ getPicture();
 <template>
 
     <div id="img_accueil">
-        <img id="img_challenge" :src="serverUrl + pictureInfos.data.picture"></img>
+        <img id="img_challenge" :src="serverUrl + pictureInfos.picture"></img>
         <img id="img" src="@/assets/images/accueil/accueil.jpg"> </img>
     </div>
     <div id="infos">
-        <div v-if=pictureInfos.data.picture id="first_scare">
+        <div v-if=pictureInfos.picture id="first_scare">
             <div>
-                <h2> {{ pictureInfos.data.title_theme }} </h2>
-                <h4> {{ pictureInfos.data.description_theme }} </h4>
+                <h2> {{ pictureInfos.title_theme }} </h2>
+                <h4> {{ pictureInfos.description_theme }} </h4>
             </div>
             <button @click=goToCurrentChallenge() id="btn_Chall"> > </button>
         </div>
