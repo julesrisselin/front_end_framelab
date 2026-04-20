@@ -10,7 +10,7 @@ const authentification = ref(false);
 async function getPicture() {
     const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/challenges/current")
     const data = await resp.json();
-    pictureInfos.value = data;
+    pictureInfos.value = data.data;
 
     const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
@@ -30,35 +30,35 @@ getPicture();
 <template>
 
     <div id="picture_box">
-        <img :src="'http://localhost:3000/' + pictureInfos.data.picture" id="picture"></img>
+        <img :src="'http://localhost:3000/' + pictureInfos.picture" id="picture"></img>
     </div>
 
 
     <h1 id="title"> Challenge de la Semaine ! </h1>
-    <h3 id="title"> {{ pictureInfos.data.title_theme }} </h3>
+    <h3 id="title"> {{ pictureInfos.title_theme }} </h3>
 
 
     <div id="scare">
 
         <div id="infos_chall">
             <ul>
-                Thème : {{ pictureInfos.data.title_theme }}
+                Thème : {{ pictureInfos.title_theme }}
             </ul>
             <ul>
-                Description {{ pictureInfos.data.description_theme }}
+                Description {{ pictureInfos.description_theme }}
             </ul>
             <ul>
-                Date de début : {{ pictureInfos.data.date_start }}
+                Date de début : {{ pictureInfos.date_start }}
             </ul>
             <ul>
-                Date de fin : {{ pictureInfos.data.date_end }}
+                Date de fin : {{ pictureInfos.date_end }}
             </ul>
         </div>
 
 
 
         <div id="btn_participations">
-            <router-link :to="`/${pictureInfos.data.id}/subparticipation`">
+            <router-link :to="`/${pictureInfos.id}/subparticipation`">
                 <button id="btn"> Participer ! > </button>
             </router-link>
             <br>

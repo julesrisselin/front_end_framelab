@@ -11,13 +11,13 @@ async function getData() {
         credentials: "include"
     })
     const dataUser = await respAccount.json();
-    userInfos.value = dataUser;
+    userInfos.value = dataUser.data;
     const paramsPart = new URLSearchParams();
     paramsPart.append("user_id", userInfos.value.id);
 
     const respPart = await fetch(`http://localhost:3000/api/participations?user_id=${paramsPart}`)
     const dataPart = await respPart.json();
-    participation.value = dataPart;
+    participation.value = dataPart.data;
    
 }
 
@@ -30,7 +30,7 @@ getData();
 
     <h1> Historique de vos participations </h1>
 
-    <li v-for="(picture) in participation.data">
+    <li v-for="(picture) in participation">
         <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
         <button @click="$router.push('/participation/'+ picture.id)"> Voir les détails </button>

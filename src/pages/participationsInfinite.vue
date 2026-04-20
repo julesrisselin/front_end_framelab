@@ -16,7 +16,7 @@ const emptymess = ref(false);
 async function getParticipations() {
     const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/participations")
     const data = await resp.json();
-    participationsInfos.value = data;
+    participationsInfos.value = data.data;
 }
 
 async function account() {
@@ -36,12 +36,12 @@ async function getPartByChallenge() {
 
     const respPart = await fetch(`http://localhost:3000/api/participations?${params}`);
     const dataPart = await respPart.json();
-    if (dataPart.data.length > 0) {
+    if (dataPart.length > 0) {
         checkChallenge.value = true;
     } else {
         emptymess.value = true;
     }
-    partInfosByChallenge.value = dataPart;
+    partInfosByChallenge.value = dataPart.data;
 }
 
 
@@ -51,12 +51,12 @@ async function getPartByUserID() {
 
     const respUser = await fetch(`http://localhost:3000/api/participations?${params}`);
     const dataUser = await respUser.json();
-    if (dataUser.data.length > 0) {
+    if (dataUser.length > 0) {
         checkUser.value = true;
     } else {
         emptymess.value = true;
     }
-    partInfosByUser.value = dataUser;
+    partInfosByUser.value = dataUser.data;
     
 }
 
@@ -97,18 +97,18 @@ getParticipations();
         <h2 class=""> Toutes les Participations ! </h2>
     </div>
 
-    <li v-if="checkChallenge" v-for="(picture) in partInfosByChallenge.data">
+    <li v-if="checkChallenge" v-for="(picture) in partInfosByChallenge">
         <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
     </li>
-    <li v-else-if="checkUser" v-for="(picture) in partInfosByUser.data">
+    <li v-else-if="checkUser" v-for="(picture) in partInfosByUser">
         <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
     </li>
     <li v-else-if="emptymess">
         <h3> L'id donnée n'a aucune participation associée </h3>
     </li>
-    <li v-else v-for="(picture) in participationsInfos.data">
+    <li v-else v-for="(picture) in participationsInfos">
         <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
     </li>

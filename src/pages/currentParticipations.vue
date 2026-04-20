@@ -10,16 +10,16 @@ const authentification = ref(false);
 async function getData() {
     const respChallenge = await fetch(import.meta.env.VITE_SERVER_URL + "/api/challenges/current");
     const dataChallenge = await respChallenge.json();
-    challengeInfos.value = dataChallenge;
+    challengeInfos.value = dataChallenge.data;
 
-    const id_challenge = challengeInfos.value.data.id;
+    const id_challenge = challengeInfos.value.id;
 
     const params = new URLSearchParams();
     params.append("id_challenge", id_challenge);
 
     const respPart = await fetch(`http://localhost:3000/api/participations?${params}`);
     const dataPart = await respPart.json();
-    partInfos.value = dataPart;
+    partInfos.value = dataPart.data;
 
     const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
@@ -41,7 +41,7 @@ getData();
 
     <div id="challenge">
         <div id="img_chall">
-            <img :src="'http://localhost:3000/' + challengeInfos.data.picture" id="picture"></img>
+            <img :src="'http://localhost:3000/' + challengeInfos.picture" id="picture"></img>
         </div>
 
 
@@ -49,19 +49,18 @@ getData();
             <div id="infos_chall">
                 <h2> Challenge de la Semaine ! </h2>
                 <ul>
-                    Thème : {{ challengeInfos.data.title_theme }}
+                    Thème : {{ challengeInfos.title_theme }}
                 </ul>
                 <ul>
-                    Description {{ challengeInfos.data.description_theme }}
+                    Description {{ challengeInfos.description_theme }}
                 </ul>
                 <ul>
-                    Date de début : {{ challengeInfos.data.date_start }}
+                    Date de début : {{ challengeInfos.date_start }}
                 </ul>
                 <ul>
-                    Date de fin : {{ challengeInfos.data.date_end }}
+                    Date de fin : {{ challengeInfos.date_end }}
                 </ul>
             </div>
-
         </div>
 
     </div>
@@ -70,7 +69,7 @@ getData();
 
     <v-container>
         <v-row gap="100">
-            <v-col v-for="(picture) in partInfos.data" max-width="600" max-height="600" id="cards">
+            <v-col v-for="(picture) in partInfos" max-width="600" max-height="600" id="cards">
                 <v-sheet class="pa-2">
                     <v-card>
                         <v-img color="surface-variant" height="200"

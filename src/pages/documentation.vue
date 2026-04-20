@@ -141,7 +141,7 @@
         </v-expansion-panel>
     </v-expansion-panels>
     
-    <button id="btn-api" ><a :href="serverUrl + '/docs/'"> Documentation Technique </a></button>
+    <button id="btn-api" ><a :href="serverUrl + '/api-docs'"> Documentation Technique </a></button>
 </template>
 <script setup>
 import { ref } from 'vue';

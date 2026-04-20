@@ -21,6 +21,7 @@ const dataUserLog = ref();
 const nb_total_com = ref();
 const userData = ref("");
 const repSubVotes = ref();
+const respSubCom = ref();
 const URL_SERVEUR = ref(import.meta.env.VITE_SERVER_URL);
 
 const paramsPart = new URLSearchParams();
@@ -31,29 +32,29 @@ paramsPart.append("id_participation", id_participation);
 async function getData() {
     const respPart = await fetch(`http://localhost:3000/api/participations?${paramsPart}`)
     const dataPart = await respPart.json();
-    participation.value = dataPart;
+    participation.value = dataPart.data;
 
     const paramsUser = new URLSearchParams();
-    paramsUser.append("user_id", participation.value.data.user_id);
+    paramsUser.append("user_id", participation.value.user_id);
 
     const respUser = await fetch(`http://localhost:3000/api/users?${paramsUser}`)
     const dataUser = await respUser.json();
-    user.value = dataUser;
+    user.value = dataUser.data;
 
     const paramsComVotes = new URLSearchParams();
-    paramsComVotes.append("id_participation", participation.value.data.id);
+    paramsComVotes.append("id_participation", participation.value.id);
 
     const respComments = await fetch(`http://localhost:3000/api/comments?${paramsComVotes}`);
     const dataComments = await respComments.json();
-    comments.value = dataComments;
+    comments.value = dataComments.data;
 
     const respVotes = await fetch(`http://localhost:3000/api/votes?${paramsComVotes}`)
     const dataVotes = await respVotes.json();
-    votes.value = dataVotes;
+    votes.value = dataVotes.data;
 
     const respVotesTotal = await fetch('http://localhost:3000/api/votes')
     const dataVotesTotal = await respVotesTotal.json();
-    nb_total_com.value = dataVotesTotal.data.length;
+    nb_total_com.value = dataVotesTotal.length;
 
     const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
         credentials: "include"
@@ -85,11 +86,14 @@ async function sendComments() {
             content: commentaires.value
         }),
     });
+    const data = await response.json();
+    if (data.success == false)
+            respSubCom.value = data.message
 }
 
 async function sendVotes() {
-    if (userData.value.id == participation.value.data.user_id) {
-        return repSubVotes.value == 0;
+    if (userData.value.id == participation.value.user_id) {
+        return repSubVotes.value = "Vous ne pouvez pas voter pour votre propre participation";
     } else {
         const response = await fetch(import.meta.env.VITE_SERVER_URL + "/api/votes", {
             method: "POST",
@@ -107,13 +111,14 @@ async function sendVotes() {
         });
         const votesData = await response.json();
         if (votesData.success) {
-            repSubVotes.value == true;
+            repSubVotes.value = "Votre votes a bien été pris en compte";
+        } else {
+            repSubVotes.value = "Vous avez déjà voter";
         }
     }
 }
 
 async function suppCom(id) {
-    console.log(id);
     const response = await fetch(import.meta.env.VITE_API + "/comments", {
         method: "PUT",
         credentials: "include",
@@ -133,13 +138,13 @@ getData();
 <template>
 
     <div>
-        <img :src="'http://localhost:3000/' + participation.data.picture_updated_url" id="picture"></img>
+        <img :src="'http://localhost:3000/' + participation.picture_updated_url" id="picture"></img>
     </div>
     <div>
-        <h3> Fait par {{ user.data.name }} {{ user.data.firstname }} le {{ participation.data.date_submission }}</h3>
+        <h3> Fait par {{ user.name }} {{ user.firstname }} le {{ participation.date_submission }}</h3>
     </div>
     <div>
-        <h3> Pour le challenge N°{{ participation.data.id_challenge }} </h3>
+        <h3> Pour le challenge N°{{ participation.id_challenge }} </h3>
     </div>
 
     <input type="number" v-model=note_creativity max="5" class="vote" placeholder="note de créativité"
@@ -149,18 +154,21 @@ getData();
     <input type="number" v-model=note_technique max="5" class="vote" placeholder="note respect du thème"
         name="note_on_theme">
     <button @click=sendVotes()> Envoyer </button>
-    <h5 v-if="repSubVotes"> Vos votes ont bien été envoyés </h5>
-    <h5 v-if="repSubVotes == 0"> Vous ne pouvez pas voter pour votre propre participation </h5>
+    <h5> {{ repSubVotes }} </h5>
+    
 
     <br>
 
+
     <input type="text" v-model=commentaires class="comments" placeholder="Entrez un commentaires" name="comments">
     <button @click=sendComments()> Envoyer </button>
+    <br>
+    {{ respSubCom }}
 
     <h4> Votes :</h4>
     <v-container id="votes">
         <v-row>
-            <v-col v-for="(votes) in votes.data">
+            <v-col v-for="(votes) in votes">
                 <v-sheet>
                     <v-list>
                         <h5>
@@ -184,7 +192,7 @@ getData();
 
     <h3> Commentaire :</h3>
     <h4> Nombre total de commentaires : {{ nb_total_com }}</h4>
-    <li v-for="(comments) in comments.data">
+    <li v-for="(comments) in comments">
         <h5 v-if="comments.is_visible"> Compte N° {{ comments.user_id }} </h5>
         <p v-if="comments.is_visible">{{ comments.content }}</p>
         <button v-if="verifAdmin && comments.is_visible" @click=suppCom(comments.id)> Supprimer </button>
