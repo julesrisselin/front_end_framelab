@@ -15,14 +15,14 @@ async function getData() {
     const paramsPart = new URLSearchParams();
     paramsPart.append("user_id", userInfos.value.id);
 
-    const respPart = await fetch(`http://localhost:3000/api/comments?${paramsPart}`)
+    const respPart = await fetch(`${URL_SERVEUR}/api/comments?${paramsPart}`)
     const dataPart = await respPart.json();
     comments.value = dataPart.data;
    
 }
 
 async function suppCom(id) {
-    const response = await fetch(import.meta.env.VITE_SERVER_URL + "/api/comments", {
+    const response = await fetch('${URL_SERVEUR}/api/comments', {
         method: "PUT",
         credentials: "include",
         headers: {

@@ -17,12 +17,11 @@ const commentaires = ref("");
 const note_creativity = ref("");
 const note_on_theme = ref("");
 const note_technique = ref("");
-const dataUserLog = ref();
 const nb_total_com = ref();
 const userData = ref("");
 const repSubVotes = ref();
 const respSubCom = ref();
-const URL_SERVEUR = ref(import.meta.env.VITE_SERVER_URL);
+const URL_SERVEUR = import.meta.env.VITE_SERVER_URL;
 
 const paramsPart = new URLSearchParams();
 paramsPart.append("id_participation", id_participation);
@@ -30,33 +29,35 @@ paramsPart.append("id_participation", id_participation);
 
 
 async function getData() {
-    const respPart = await fetch(`http://localhost:3000/api/participations?${paramsPart}`)
+    const respPart = await fetch(`${URL_SERVEUR}/api/participations?${paramsPart}`)
     const dataPart = await respPart.json();
     participation.value = dataPart.data;
 
     const paramsUser = new URLSearchParams();
     paramsUser.append("user_id", participation.value.user_id);
 
-    const respUser = await fetch(`http://localhost:3000/api/users?${paramsUser}`)
+    const respUser = await fetch(`${URL_SERVEUR}/api/users?${paramsUser}`)
     const dataUser = await respUser.json();
     user.value = dataUser.data;
 
     const paramsComVotes = new URLSearchParams();
     paramsComVotes.append("id_participation", participation.value.id);
 
-    const respComments = await fetch(`http://localhost:3000/api/comments?${paramsComVotes}`);
+    const respComments = await fetch(`${URL_SERVEUR}/api/comments?${paramsComVotes}`);
     const dataComments = await respComments.json();
     comments.value = dataComments.data;
+    nb_total_com.value = dataComments.data.length;
 
-    const respVotes = await fetch(`http://localhost:3000/api/votes?${paramsComVotes}`)
+    const respVotes = await fetch(`${URL_SERVEUR}/api/votes?${paramsComVotes}`)
     const dataVotes = await respVotes.json();
     votes.value = dataVotes.data;
 
-    const respVotesTotal = await fetch('http://localhost:3000/api/votes')
-    const dataVotesTotal = await respVotesTotal.json();
-    nb_total_com.value = dataVotesTotal.length;
 
-    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
+    const respVotesTotal = await fetch(`${URL_SERVEUR}/api/votes`)
+    const dataVotesTotal = await respVotesTotal.json();
+
+
+    const respAccount = await fetch(`${URL_SERVEUR}/api/users/me`, {
         credentials: "include"
     })
 
@@ -74,7 +75,7 @@ async function getData() {
 }
 
 async function sendComments() {
-    const response = await fetch(import.meta.env.VITE_SERVER_URL + "/api/comments", {
+    const response = await fetch(`${URL_SERVEUR}/api/comments`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -88,14 +89,14 @@ async function sendComments() {
     });
     const data = await response.json();
     if (data.success == false)
-            respSubCom.value = data.message
+        respSubCom.value = data.message
 }
 
 async function sendVotes() {
     if (userData.value.id == participation.value.user_id) {
         return repSubVotes.value = "Vous ne pouvez pas voter pour votre propre participation";
     } else {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + "/api/votes", {
+        const response = await fetch(`${URL_SERVEUR}/api/votes`, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -119,7 +120,7 @@ async function sendVotes() {
 }
 
 async function suppCom(id) {
-    const response = await fetch(import.meta.env.VITE_API + "/comments", {
+    const response = await fetch(`${URL_SERVEUR}/comments`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -138,7 +139,7 @@ getData();
 <template>
 
     <div>
-        <img :src="'http://localhost:3000/' + participation.picture_updated_url" id="picture"></img>
+        <img :src="URL_SERVEUR + participation.picture_updated_url" id="picture"></img>
     </div>
     <div>
         <h3> Fait par {{ user.name }} {{ user.firstname }} le {{ participation.date_submission }}</h3>
@@ -147,73 +148,103 @@ getData();
         <h3> Pour le challenge N°{{ participation.id_challenge }} </h3>
     </div>
 
-    <input type="number" v-model=note_creativity max="5" class="vote" placeholder="note de créativité"
-        name="note_creativity">
-    <input type="number" v-model=note_on_theme max="5" class="vote" placeholder="note de technique"
-        name="note_technique">
-    <input type="number" v-model=note_technique max="5" class="vote" placeholder="note respect du thème"
-        name="note_on_theme">
-    <button @click=sendVotes()> Envoyer </button>
-    <h5> {{ repSubVotes }} </h5>
-    
+    <div id="input_box">
+        <div id="input_votes">
+            <v-card class="mx-auto" minWidth="600" max-width="600">
+                <v-card-title class="font-weight-medium" id="text"> NOTER LA PARTICIPATION </v-card-title>
+                <v-card-text>
+                    <v-text-field v-model="note_creativity" type=" number" max="5" class="vote"
+                        placeholder="note de créativité" name="note_creativity" />
+                    <v-text-field v-model="note_technique" type=" number" max="5" class="vote"
+                        placeholder="note de technique" name="note_technique" />
+                    <v-text-field v-model="note_on_theme" type=" number" max="5" class="vote"
+                        placeholder="note respect du theme" name="note_on_theme" />
 
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn @click="sendVotes()" id="text">Envoyer</v-btn>
+                </v-card-actions>
+            </v-card>
+            <v-subtitle> {{ repSubVotes }} </v-subtitle>
+        </div>
+
+        <div id="input_com">
+            <v-card class="mx-auto" minWidth="600" max-width="600">
+                <v-card-title class="font-weight-medium" id="text"> COMMENTER LA PARTICIPATION </v-card-title>
+                <v-card-text>
+                    <v-text-field v-model="commentaires" type="text" class="comments"
+                        placeholder="Entrez un commentaires" name="comments" />
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn @click="sendComments()" id="text">Envoyer</v-btn>
+                </v-card-actions>
+            </v-card>
+            <v-subtitle> {{ respSubCom }} </v-subtitle>
+        </div>
+    </div>
     <br>
-
-
-    <input type="text" v-model=commentaires class="comments" placeholder="Entrez un commentaires" name="comments">
-    <button @click=sendComments()> Envoyer </button>
-    <br>
-    {{ respSubCom }}
 
     <h4> Votes :</h4>
-    <v-container id="votes">
+    <v-container>
         <v-row>
             <v-col v-for="(votes) in votes">
-                <v-sheet>
+                <v-card max-width="275px">
                     <v-list>
-                        <h5>
+                        <v-card-title id="text">
                             Compte N° {{ votes.user_id }}
-                        </h5>
-                        <ul>
+                        </v-card-title>
+                        <v-card-subtitle id="text">
                             Note de créativité : {{ votes.note_creativity }}
-                        </ul>
-                        <ul>
+                            <br>
                             Note respect du thème : {{ votes.note_on_theme }}
-                        </ul>
-                        <ul>
+                            <br>
                             Note de technique : {{ votes.note_technique }}
-                        </ul>
+                        </v-card-subtitle>
                     </v-list>
-                </v-sheet>
+                </v-card>
             </v-col>
         </v-row>
     </v-container>
 
 
     <h3> Commentaire :</h3>
-    <h4> Nombre total de commentaires : {{ nb_total_com }}</h4>
-    <li v-for="(comments) in comments">
-        <h5 v-if="comments.is_visible"> Compte N° {{ comments.user_id }} </h5>
-        <p v-if="comments.is_visible">{{ comments.content }}</p>
-        <button v-if="verifAdmin && comments.is_visible" @click=suppCom(comments.id)> Supprimer </button>
-        <h5 v-if="comments.is_visible" id="id_com"> {{ comments.id }} </h5>
-    </li>
+    <h4> Nombre total de commentaires : {{ nb_total_com }} </h4>
+    <v-container>
+        <v-row>
+            <v-col v-for="(comments) in comments" id="box-com">
+                <v-card class="mb-2" maxWidth="275px" rounded=8px>
+                    <v-card-title v-if="comments.is_visible" id="text"> Compte N° {{ comments.user_id }} </v-card-title>
+                    <v-card-subtitle v-if="comments.is_visible" id="text">{{ comments.content }}</v-card-subtitle>
+                    <v-card-action>
+                        <v-btn v-if="verifAdmin && comments.is_visible" @click=suppCom(comments.id)> Supprimer </v-btn>
+                    </v-card-action>
+                    <p v-if="comments.is_visible" id="id_com"> {{ comments.id }} </p>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 
 
-</template>
+</template>ﬂ
 
 <style scoped>
 #picture {
-    max-height: 150px;
-    max-width: 150px;
+    max-height: 350px;
+    max-width: 350px;
 }
 
 #id_com {
     visibility: hidden;
 }
 
-#votes {
+#input_box {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
+}
+
+#text {
+    color: #6B9080;
 }
 </style>

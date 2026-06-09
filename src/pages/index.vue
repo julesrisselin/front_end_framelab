@@ -11,7 +11,7 @@ const serverUrl = ref(import.meta.env.VITE_SERVER_URL);
 async function getPicture() {
     const resp = await fetch(import.meta.env.VITE_SERVER_URL + "/api/challenges/current")
     const data = await resp.json();
-    
+
     pictureInfos.value = data.data;
 
     if (pictureInfos.value.success == false) {
@@ -50,7 +50,7 @@ getPicture();
 
 <template>
 
-    <div id="img_accueil">
+    <!-- <div id="img_accueil">
         <img id="img_challenge" :src="serverUrl + pictureInfos.picture"></img>
         <img id="img" src="@/assets/images/accueil/accueil.jpg"> </img>
     </div>
@@ -60,9 +60,26 @@ getPicture();
                 <h2> {{ pictureInfos.title_theme }} </h2>
                 <h4> {{ pictureInfos.description_theme }} </h4>
             </div>
-            <button @click=goToCurrentChallenge() id="btn_Chall"> > </button>
+            <router-link :to="`/currentChallenge`">
+                <v-btn variant="outlined" id="btn"> Voir le Challenge </v-btn>
+            </router-link>
         </div>
+    </div> -->
 
+    <div id="img_accueil">
+        <v-card id="infos" title="BIENVENUE !" min-width="800" max-width="1000" max-height="800">
+            <img id="img_challenge" :src="serverUrl + pictureInfos.picture"></img>
+            <v-subtitle>
+                <h2 id="infos"> {{ pictureInfos.title_theme }} </h2>
+                <h4 id="infos"> {{ pictureInfos.description_theme }} </h4>
+            </v-subtitle>
+            <v-card-actions>
+                <router-link :to="`/currentChallenge`">
+                    <v-btn variant="outlined" id="btn"> Voir le Challenge </v-btn>
+                </router-link>
+            </v-card-actions>
+        </v-card>
+        <img id="img" src="@/assets/images/accueil/accueil.jpg"> </img>
     </div>
 </template>
 
@@ -77,6 +94,11 @@ getPicture();
     margin-top: -4%;
 }
 
+#infos {
+    color: #6B9080;
+    margin-left: 10px;
+}
+
 #img_challenge {
     margin-left: 2%;
     border-radius: 20px;
@@ -85,19 +107,15 @@ getPicture();
 }
 
 #first_scare {
-    margin-left: 2%;
     display: flex;
     justify-content: flex-start;
-    margin-right: 5%;
 }
 
-#btn_Chall {
-    font-size: 30px;
-    border-radius: 40px;
-    height: 50px;
-    width: 70px;
-    background-color: #CCE3DE;
-    margin-left: 3%;
-    margin-top: 3%;
+#btn {
+    color: #6B9080;
+    height: 55px;
+    width: 140px;
+    border-radius: 20px;
+    font-weight: bold;
 }
 </style>

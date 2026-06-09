@@ -6,9 +6,10 @@ const challengeInfos = ref({});
 const partInfos = ref([]);
 const router = useRouter();
 const authentification = ref(false);
+const URL_SERVEUR = import.meta.env.VITE_SERVER_URL
 
 async function getData() {
-    const respChallenge = await fetch(import.meta.env.VITE_SERVER_URL + "/api/challenges/current");
+    const respChallenge = await fetch(`${URL_SERVEUR}/api/challenges/current`);
     const dataChallenge = await respChallenge.json();
     challengeInfos.value = dataChallenge.data;
 
@@ -17,11 +18,11 @@ async function getData() {
     const params = new URLSearchParams();
     params.append("id_challenge", id_challenge);
 
-    const respPart = await fetch(`http://localhost:3000/api/participations?${params}`);
+    const respPart = await fetch(`${URL_SERVEUR}/api/participations?${params}`);
     const dataPart = await respPart.json();
     partInfos.value = dataPart.data;
 
-    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
+    const respAccount = await fetch(`${URL_SERVEUR}/api/users/me`, {
         credentials: "include"
     })
 
@@ -41,25 +42,25 @@ getData();
 
     <div id="challenge">
         <div id="img_chall">
-            <img :src="'http://localhost:3000/' + challengeInfos.picture" id="picture"></img>
+            <img :src="URL_SERVEUR + challengeInfos.picture" id="picture"></img>
         </div>
 
 
         <div id="scare">
             <div id="infos_chall">
                 <h2> Challenge de la Semaine ! </h2>
-                <ul>
-                    Thème : {{ challengeInfos.title_theme }}
-                </ul>
-                <ul>
-                    Description {{ challengeInfos.description_theme }}
-                </ul>
-                <ul>
-                    Date de début : {{ challengeInfos.date_start }}
-                </ul>
-                <ul>
-                    Date de fin : {{ challengeInfos.date_end }}
-                </ul>
+                <v-card variant="tonal">
+                    <v-card-title>
+                        {{ challengeInfos.title_theme }}
+                    </v-card-title>
+                    <v-card-subtitle>
+                        Du {{ (new Date(challengeInfos.date_start)).toLocaleDateString() }}
+                        au {{ (new Date(challengeInfos.date_end)).toLocaleDateString() }}
+                    </v-card-subtitle>
+                    <v-card-text>
+                        {{ challengeInfos.description_theme }}
+                    </v-card-text>
+                </v-card>
             </div>
         </div>
 
@@ -71,9 +72,9 @@ getData();
         <v-row gap="100">
             <v-col v-for="(picture) in partInfos" max-width="600" max-height="600" id="cards">
                 <v-sheet class="pa-2">
-                    <v-card>
-                        <v-img color="surface-variant" height="200"
-                            :src="'http://localhost:3000/' + picture.picture_updated_url" cover />
+                    <v-card maxWidth="400" maxHeight="300">
+                        <v-img color="surface-variant" height="200" :src="URL_SERVEUR + picture.picture_updated_url"
+                            cover />
                         <v-card-actions>
                             <v-btn @click="$router.push('/participation/' + picture.id)"> Voir les détails </v-btn>
                         </v-card-actions>

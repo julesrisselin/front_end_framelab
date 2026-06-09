@@ -5,9 +5,10 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const userInfos = ref([]);
 const participation = ref([]);
+const URL_SERVEUR = import.meta.env.VITE_SERVER_URL
 
 async function getData() {
-    const respAccount = await fetch(import.meta.env.VITE_SERVER_URL + "/api/users/me", {
+    const respAccount = await fetch('${URL_SERVEUR}/api/users/me', {
         credentials: "include"
     })
     const dataUser = await respAccount.json();
@@ -15,10 +16,10 @@ async function getData() {
     const paramsPart = new URLSearchParams();
     paramsPart.append("user_id", userInfos.value.id);
 
-    const respPart = await fetch(`http://localhost:3000/api/participations?user_id=${paramsPart}`)
+    const respPart = await fetch(`${URL_SERVEUR}/api/participations?user_id=${paramsPart}`)
     const dataPart = await respPart.json();
     participation.value = dataPart.data;
-   
+
 }
 
 
@@ -31,9 +32,9 @@ getData();
     <h1> Historique de vos participations </h1>
 
     <li v-for="(picture) in participation">
-        <img :src="'http://localhost:3000/' + picture.picture_updated_url" id="picture"></img>
+        <img :src="URL_SERVEUR + picture.picture_updated_url" id="picture"></img>
         {{ picture.date_submission }}
-        <button @click="$router.push('/participation/'+ picture.id)"> Voir les détails </button>
+        <button @click="$router.push('/participation/' + picture.id)"> Voir les détails </button>
     </li>
 </template>
 
